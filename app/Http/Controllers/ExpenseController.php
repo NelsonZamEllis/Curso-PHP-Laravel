@@ -8,6 +8,10 @@ use App\Expense;
 
 class ExpenseController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -41,12 +45,14 @@ class ExpenseController extends Controller
 
         $validData = $request->validate([
             'description' => 'required|min:3',
-            'amount' => 'required|integer|min:1'
+            'amount' => 'required|integer|min:1',
+            'email'=>'required|min:5'
         ]);
 
-        $expense = new Expense();    
+        $expense = new Expense();
         $expense->description = $validData['description'];
         $expense->amount = $validData['amount'];
+        $expense->user_email = $validData['email'];
         $expense->expense_report_id = $expenseReport->id;
         $expense->save();
 
